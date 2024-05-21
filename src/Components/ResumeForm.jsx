@@ -24,9 +24,11 @@ const ResumeForm = ({ onSubmit }) => {
       education: [
         { school: "", degree: "", city: "", startDate: "", endDate: "" },
       ],
+      skills: [{ skill: "" }],
     },
   });
   const [selectedTab, setSelectedTab] = useState(0);
+
   const {
     fields: socialFields,
     append: appendSocial,
@@ -35,6 +37,7 @@ const ResumeForm = ({ onSubmit }) => {
     control,
     name: "socialLinks",
   });
+
   const {
     fields: educationFields,
     append: appendEducation,
@@ -42,6 +45,15 @@ const ResumeForm = ({ onSubmit }) => {
   } = useFieldArray({
     control,
     name: "education",
+  });
+
+  const {
+    fields: skillFields,
+    append: appendSkill,
+    remove: removeSkill,
+  } = useFieldArray({
+    control,
+    name: "skills",
   });
 
   const handleFormSubmit = (data) => {
@@ -224,18 +236,13 @@ const ResumeForm = ({ onSubmit }) => {
                     }}
                   >
                     <div style={{display:"flex", justifyContent:"space-between"}}>
-                      {" "}
                       <Typography
                         variant="h6"
                         gutterBottom
-                      
                       >
                         School/Institute
                       </Typography>
-                      <IconButton
-                      
-                        onClick={() => removeEducation(index)}
-                      >
+                      <IconButton onClick={() => removeEducation(index)}>
                         <DeleteIcon />
                       </IconButton>
                     </div>
@@ -309,18 +316,45 @@ const ResumeForm = ({ onSubmit }) => {
               </>
             )}
             {selectedTab === 2 && (
-              <Controller
-                name="skills"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Skills"
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
-              />
+              <>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ marginTop: "1rem" }}
+                >
+                  Skills
+                </Typography>
+
+                {skillFields.map((item, index) => (
+                  <Box
+                    key={item.id}
+                    sx={{
+                      display: "flex",
+                      gap: "1rem",
+                      alignItems: "center",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <Controller
+                      name={`skills[${index}].skill`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="Skill" fullWidth />
+                      )}
+                    />
+                    <IconButton onClick={() => removeSkill(index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                ))}
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() => appendSkill({ skill: "" })}
+                >
+                  Add Skill
+                </Button>
+              </>
             )}
             {selectedTab === 3 && (
               <Controller
