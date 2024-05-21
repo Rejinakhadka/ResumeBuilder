@@ -25,6 +25,9 @@ const ResumeForm = ({ onSubmit }) => {
         { school: "", degree: "", city: "", startDate: "", endDate: "" },
       ],
       skills: [{ skill: "" }],
+      experience: [
+        { jobTitle: "", Company: "", city: "", startDate: "", endDate: "" },
+      ],
     },
   });
   const [selectedTab, setSelectedTab] = useState(0);
@@ -55,7 +58,14 @@ const ResumeForm = ({ onSubmit }) => {
     control,
     name: "skills",
   });
-
+  const {
+    fields: experienceFields,
+    append: appendexperience,
+    remove: removeexperience,
+  } = useFieldArray({
+    control,
+    name: "experience",
+  });
   const handleFormSubmit = (data) => {
     onSubmit(data);
     console.log(data, "Form Data");
@@ -235,11 +245,13 @@ const ResumeForm = ({ onSubmit }) => {
                       marginBottom: "1rem",
                     }}
                   >
-                    <div style={{display:"flex", justifyContent:"space-between"}}>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                      >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="h6" gutterBottom>
                         School/Institute
                       </Typography>
                       <IconButton onClick={() => removeEducation(index)}>
@@ -357,18 +369,100 @@ const ResumeForm = ({ onSubmit }) => {
               </>
             )}
             {selectedTab === 3 && (
-              <Controller
-                name="experience"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Experience"
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
-              />
+              <>
+             
+
+                {experienceFields.map((item, index) => (
+                  <Box
+                    key={item.id}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="h6" gutterBottom>
+                       Experience
+                      </Typography>
+                      <IconButton onClick={() => removeexperience(index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+
+                    <Controller
+                      name={`experience[${index}].jobTitle`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="Job Title" fullWidth />
+                      )}
+                    />
+                    <Controller
+                      name={`experience[${index}].Company`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="Company" fullWidth />
+                      )}
+                    />
+                    <Controller
+                      name={`experience[${index}].city`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="City" fullWidth />
+                      )}
+                    />
+                    <Box sx={{ display: "flex", gap: "1rem" }}>
+                      <Controller
+                        name={`experience[${index}].startDate`}
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="Start Date"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            fullWidth
+                          />
+                        )}
+                      />
+                      <Controller
+                        name={`experience[${index}].endDate`}
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="End Date"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            fullWidth
+                          />
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                ))}
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() =>
+                    appendexperience({
+                      jobTitle: "",
+                      Company: "",
+                      city: "",
+                      startDate: "",
+                      endDate: "",
+                    })
+                  }
+                >
+                  Add Experience
+                </Button>
+              </>
             )}
             {selectedTab === 4 && (
               <Controller
@@ -398,7 +492,6 @@ const ResumeForm = ({ onSubmit }) => {
                 )}
               />
             )}
-          
           </form>
         </Box>
       </Box>
