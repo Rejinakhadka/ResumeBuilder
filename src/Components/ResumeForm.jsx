@@ -21,12 +21,27 @@ const ResumeForm = ({ onSubmit }) => {
         { platform: "LinkedIn", url: "" },
         { platform: "Website", url: "" },
       ],
+      education: [
+        { school: "", degree: "", city: "", startDate: "", endDate: "" },
+      ],
     },
   });
   const [selectedTab, setSelectedTab] = useState(0);
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: socialFields,
+    append: appendSocial,
+    remove: removeSocial,
+  } = useFieldArray({
     control,
     name: "socialLinks",
+  });
+  const {
+    fields: educationFields,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
+    control,
+    name: "education",
   });
 
   const handleFormSubmit = (data) => {
@@ -150,7 +165,7 @@ const ResumeForm = ({ onSubmit }) => {
                 >
                   Social Links
                 </Typography>
-                {fields.map((item, index) => (
+                {socialFields.map((item, index) => (
                   <Box
                     key={item.id}
                     sx={{
@@ -174,7 +189,7 @@ const ResumeForm = ({ onSubmit }) => {
                         <TextField {...field} label="URL" fullWidth />
                       )}
                     />
-                    <IconButton onClick={() => remove(index)}>
+                    <IconButton onClick={() => removeSocial(index)}>
                       <DeleteIcon />
                     </IconButton>
                   </Box>
@@ -182,25 +197,116 @@ const ResumeForm = ({ onSubmit }) => {
                 <Button
                   variant="outlined"
                   startIcon={<AddIcon />}
-                  onClick={() => append({ platform: "", url: "" })}
+                  onClick={() => appendSocial({ platform: "", url: "" })}
                 >
                   Add Social Link
                 </Button>
               </>
             )}
             {selectedTab === 1 && (
-              <Controller
-                name="education"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Education"
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
-              />
+              <>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ marginTop: "1rem" }}
+                >
+                  Education
+                </Typography>
+
+                {educationFields.map((item, index) => (
+                  <Box
+                    key={item.id}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <div style={{display:"flex", justifyContent:"space-between"}}>
+                      {" "}
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                      
+                      >
+                        School/Institute
+                      </Typography>
+                      <IconButton
+                      
+                        onClick={() => removeEducation(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+
+                    <Controller
+                      name={`education[${index}].school`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="School Name" fullWidth />
+                      )}
+                    />
+                    <Controller
+                      name={`education[${index}].degree`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="Degree" fullWidth />
+                      )}
+                    />
+                    <Controller
+                      name={`education[${index}].city`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField {...field} label="City" fullWidth />
+                      )}
+                    />
+                    <Box sx={{ display: "flex", gap: "1rem" }}>
+                      <Controller
+                        name={`education[${index}].startDate`}
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="Start Date"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            fullWidth
+                          />
+                        )}
+                      />
+                      <Controller
+                        name={`education[${index}].endDate`}
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="End Date"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            fullWidth
+                          />
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                ))}
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() =>
+                    appendEducation({
+                      school: "",
+                      degree: "",
+                      city: "",
+                      startDate: "",
+                      endDate: "",
+                    })
+                  }
+                >
+                  Add Education
+                </Button>
+              </>
             )}
             {selectedTab === 2 && (
               <Controller
