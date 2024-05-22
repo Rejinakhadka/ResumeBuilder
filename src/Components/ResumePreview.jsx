@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Box,
 } from "@mui/material";
 import {
   Email,
@@ -46,9 +47,7 @@ const ResumePreview = ({ data }) => {
       <div style={{ display: "flex", marginTop: 16 }}>
         <div style={{ width: "30%" }}>
           <div style={{ marginBottom: 24 }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              About
-            </Typography>
+         
 
             <Typography variant="body1" display="flex" alignItems="center">
               <Email sx={{ marginRight: 1 }} /> {data.email}
@@ -78,9 +77,29 @@ const ResumePreview = ({ data }) => {
               </Typography>
             ))}
           </div>
+          <div>
+          <Box sx={{ color: "black" }}>
+        <Typography variant="h6" sx={{ marginBottom: 2, backgroundColor: "#f2f2f2", padding: "8px", borderRadius: "10px",width:"150px"}}>
+          Education
+        </Typography>
+        {data.education.map((edu, index) => (
+          <Box key={index} sx={{ mb: 3 }}>
+            <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
+              {edu.degree}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "gray", mb: 1 }}>
+              {edu.school} / {edu.city}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "gray", mb: 1 }}>
+              {edu.startDate} - {edu.endDate}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+          </div>
 
           <div>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+          <Typography variant="h6" sx={{ marginBottom: 2, backgroundColor: "#f2f2f2", padding: "8px", borderRadius: "10px", width:"150px" }}>
               Skills
             </Typography>
             <List>
@@ -99,7 +118,7 @@ const ResumePreview = ({ data }) => {
 
         <div style={{ marginLeft: 16, width: "70%" }}>
           <div style={{ marginBottom: 24 }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 2, backgroundColor: "#f2f2f2", padding: "8px", borderRadius: "10px",width:"250px" }}>
               Work Experience
             </Typography>
             {data.experience.map((exp, index) => (
@@ -128,7 +147,7 @@ const ResumePreview = ({ data }) => {
           </div>
 
           <div style={{ marginBottom: 24 }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{marginBottom: 2, backgroundColor: "#f2f2f2", padding: "8px", borderRadius: "10px",width:"250px"}}>
               Achievements
             </Typography>
             {data.achievements.map((ach, index) => (
@@ -150,7 +169,7 @@ const ResumePreview = ({ data }) => {
           </div>
 
           <div>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 2, backgroundColor: "#f2f2f2", padding: "8px", borderRadius: "10px",width:"250px"}}>
               Projects
             </Typography>
             {data.projects.map((project, index) => (
