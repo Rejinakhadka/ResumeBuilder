@@ -89,84 +89,94 @@ const ResumeForm = ({ onSubmit }) => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Resume Builder
-      </Typography>
-      <Box sx={{ display: "flex" }}>
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={selectedTab}
-          onChange={handleTabChange}
-          sx={{ borderRight: 1, borderColor: "divider", minWidth: "200px" }}
+    <div >
+    
+      <Box sx={{ display: "flex", gap: "0px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            width: "40%",
+            gap: "30px",
+            backgroundColor: "ThreeDHighlight",
+            padding: "1rem",
+          }}
         >
-          <Tab label="About" />
-          <Tab label="Education" />
-          <Tab label="Skills" />
-          <Tab label="Experience" />
-          <Tab label="Achievements" />
-          <Tab label="Projects" />
-        </Tabs>
-        <Box sx={{  p: 1 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {selectedTab === 0 && (
-              <AboutTab
-                socialFields={socialFields}
-                appendSocial={appendSocial}
-                removeSocial={removeSocial}
-                control={control}
-              />
-            )}
-            {selectedTab === 1 && (
-              <EducationTab
-                educationFields={educationFields}
-                appendEducation={appendEducation}
-                removeEducation={removeEducation}
-                control={control}
-              />
-            )}
-            {selectedTab === 2 && (
-              <SkillsTab
-                skillFields={skillFields}
-                appendSkill={appendSkill}
-                removeSkill={removeSkill}
-                control={control}
-              />
-            )}
-            {selectedTab === 3 && (
-              <ExperienceTab
-                experienceFields={experienceFields}
-                appendExperience={appendExperience}
-                removeExperience={removeExperience}
-                control={control}
-              />
-            )}
-            {selectedTab === 4 && (
-              <AchievementsTab
-                achievementsFields={achievementsFields}
-                appendAchievements={appendAchievements}
-                removeAchievements={removeAchievements}
-                control={control}
-              />
-            )}
-            {selectedTab === 5 && (
-              <ProjectsTab
-                projectFields={projectFields}
-                appendProject={appendProject}
-                removeProject={removeProject}
-                control={control}
-              />
-            )}
-          </form>
+          <Box>
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={selectedTab}
+              onChange={handleTabChange}
+              sx={{ borderRight: 1, borderColor: "divider", width: "130px" }}
+            >
+              <Tab label="About" />
+              <Tab label="Education" />
+              <Tab label="Skills" />
+              <Tab label="Experience" />
+              <Tab label="Achievements" />
+              <Tab label="Projects" />
+            </Tabs>
+          </Box>
+          <Box>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {selectedTab === 0 && (
+                <AboutTab
+                  socialFields={socialFields}
+                  appendSocial={appendSocial}
+                  removeSocial={removeSocial}
+                  control={control}
+                />
+              )}
+              {selectedTab === 1 && (
+                <EducationTab
+                  educationFields={educationFields}
+                  appendEducation={appendEducation}
+                  removeEducation={removeEducation}
+                  control={control}
+                />
+              )}
+              {selectedTab === 2 && (
+                <SkillsTab
+                  skillFields={skillFields}
+                  appendSkill={appendSkill}
+                  removeSkill={removeSkill}
+                  control={control}
+                />
+              )}
+              {selectedTab === 3 && (
+                <ExperienceTab
+                  experienceFields={experienceFields}
+                  appendExperience={appendExperience}
+                  removeExperience={removeExperience}
+                  control={control}
+                />
+              )}
+              {selectedTab === 4 && (
+                <AchievementsTab
+                  achievementsFields={achievementsFields}
+                  appendAchievements={appendAchievements}
+                  removeAchievements={removeAchievements}
+                  control={control}
+                />
+              )}
+              {selectedTab === 5 && (
+                <ProjectsTab
+                  projectFields={projectFields}
+                  appendProject={appendProject}
+                  removeProject={removeProject}
+                  control={control}
+                />
+              )}
+            </form>
+          </Box>
         </Box>
-        <Box >
-          <Typography variant="h6">Preview</Typography>
-          <ResumePreview data={watch()} />
+        <Box sx={{ width: "60%" }}>
+          <Box sx={{ height: "100vh", overflow: "auto" }}>
+            <ResumePreview data={watch()} />
+          </Box>
         </Box>
-
       </Box>
-    </Container>
+    </div>
   );
 };
 

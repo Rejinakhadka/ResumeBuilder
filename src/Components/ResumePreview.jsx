@@ -16,10 +16,6 @@ const ResumePreview = ({ data }) => {
     <Container
       ref={componentRef}
       sx={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "beige",
-        borderRadius: "5px",
         padding: "20px",
       }}
     >
