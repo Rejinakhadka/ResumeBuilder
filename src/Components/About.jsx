@@ -6,11 +6,24 @@ import {
   Button,
   IconButton,
   Avatar,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Controller } from "react-hook-form";
 import { useImageContext } from "./context/Imagecontext";
+
+const socialPlatforms = [
+  "Instagram",
+  "LinkedIn",
+  "Github",
+  "Website",
+  "Twitter",
+
+];
 
 const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
   const { image, setImage } = useImageContext();
@@ -56,11 +69,11 @@ const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
             style={{ display: "none" }}
             onChange={handleImageUpload}
           />
-      
-            <Button variant="contained" >
+          <label htmlFor="image-upload">
+            <Button variant="contained" component="span">
               Upload Image
             </Button>
-        
+          </label>
         </Box>
         <Controller
           name="firstName"
@@ -81,7 +94,50 @@ const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
             <TextField {...field} label="Last Name" fullWidth margin="normal" />
           )}
         />
-        \
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} label="Email" fullWidth margin="normal" />
+          )}
+        />
+        <Box sx={{ display: "flex", gap: "1rem" }}>
+          <Controller
+            name="phoneno"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Phone No"
+                fullWidth
+                margin="normal"
+              />
+            )}
+          />
+          <Controller
+            name="address"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} label="Address" fullWidth margin="normal" />
+            )}
+          />
+        </Box>
+
+        <Controller
+          name="summary"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Summary"
+              fullWidth
+              margin="normal"
+              multiline
+              rows={4}
+            />
+          )}
+        />
+
         <Typography variant="h6" gutterBottom sx={{ marginTop: "1rem" }}>
           Social Links
         </Typography>
@@ -95,11 +151,20 @@ const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
               marginBottom: "1rem",
             }}
           >
-            <Controller
+             <Controller
               name={`socialLinks[${index}].platform`}
               control={control}
               render={({ field }) => (
-                <TextField {...field} label="Platform" fullWidth />
+                <FormControl fullWidth>
+                  <InputLabel>Platform</InputLabel>
+                  <Select {...field} label="Platform">
+                    {socialPlatforms.map((platform) => (
+                      <MenuItem key={platform} value={platform}>
+                        {platform}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               )}
             />
             <Controller

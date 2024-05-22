@@ -14,9 +14,8 @@ const ResumeForm = ({ onSubmit }) => {
   const { handleSubmit, control, watch } = useForm({
     defaultValues: {
       socialLinks: [
-        { platform: "GitHub", url: "" },
-        { platform: "LinkedIn", url: "" },
-        { platform: "Website", url: "" },
+        { platform: "", url: "" },
+       
       ],
       education: [
         { school: "", degree: "", city: "", startDate: "", endDate: "" },
