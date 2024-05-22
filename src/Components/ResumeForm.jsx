@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
-import {
-  Button,
-  Container,
-  TextField,
-  Typography,
-  Tabs,
-  Tab,
-  Box,
-  IconButton,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { useForm, useFieldArray } from "react-hook-form";
+import { Button, Container, Typography, Tabs, Tab, Box } from "@mui/material";
+import AboutTab from "./About";
+import EducationTab from "./Education";
+import SkillsTab from "./Skills";
+import ExperienceTab from "./Experience";
+import AchievementsTab from "./Achievements";
+import ProjectsTab from "./Project";
+
+import ResumePreview from "./ResumePreview";
 
 const ResumeForm = ({ onSubmit }) => {
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, watch } = useForm({
     defaultValues: {
       socialLinks: [
         { platform: "GitHub", url: "" },
@@ -28,6 +25,8 @@ const ResumeForm = ({ onSubmit }) => {
       experience: [
         { jobTitle: "", Company: "", city: "", startDate: "", endDate: "" },
       ],
+      projects: [{ title: "", description: "", link: "" }],
+      achievements: [{ title: "", description: "" }],
     },
   });
   const [selectedTab, setSelectedTab] = useState(0);
@@ -58,25 +57,39 @@ const ResumeForm = ({ onSubmit }) => {
     control,
     name: "skills",
   });
+
   const {
     fields: experienceFields,
-    append: appendexperience,
-    remove: removeexperience,
+    append: appendExperience,
+    remove: removeExperience,
   } = useFieldArray({
     control,
     name: "experience",
   });
-  const handleFormSubmit = (data) => {
-    onSubmit(data);
-    console.log(data, "Form Data");
-  };
+  const {
+    fields: achievementsFields,
+    append: appendAchievements,
+    remove: removeAchievements,
+  } = useFieldArray({
+    control,
+    name: "achievements",
+  });
+
+  const {
+    fields: projectFields,
+    append: appendProject,
+    remove: removeProject,
+  } = useFieldArray({
+    control,
+    name: "projects",
+  });
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
   return (
-    <Container maxWidth="md">
+    <Container>
       <Typography variant="h4" gutterBottom>
         Resume Builder
       </Typography>
@@ -95,405 +108,63 @@ const ResumeForm = ({ onSubmit }) => {
           <Tab label="Achievements" />
           <Tab label="Projects" />
         </Tabs>
-        <Box sx={{ flexGrow: 1, p: 3 }}>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <Box sx={{  p: 1 }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             {selectedTab === 0 && (
-              <>
-                <Box sx={{ display: "flex", gap: "1rem" }}>
-                  <Controller
-                    name="firstName"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="First Name"
-                        fullWidth
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Last Name"
-                        fullWidth
-                        margin="normal"
-                      />
-                    )}
-                  />
-                </Box>
-
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Email"
-                      fullWidth
-                      margin="normal"
-                    />
-                  )}
-                />
-                <Box sx={{ display: "flex", gap: "1rem" }}>
-                  <Controller
-                    name="phoneno"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Phone No"
-                        fullWidth
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="address"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Address"
-                        fullWidth
-                        margin="normal"
-                      />
-                    )}
-                  />
-                </Box>
-
-                <Controller
-                  name="summary"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Summary"
-                      fullWidth
-                      margin="normal"
-                      multiline
-                      rows={4}
-                    />
-                  )}
-                />
-
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ marginTop: "1rem" }}
-                >
-                  Social Links
-                </Typography>
-                {socialFields.map((item, index) => (
-                  <Box
-                    key={item.id}
-                    sx={{
-                      display: "flex",
-                      gap: "1rem",
-                      alignItems: "center",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <Controller
-                      name={`socialLinks[${index}].platform`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="Platform" fullWidth />
-                      )}
-                    />
-                    <Controller
-                      name={`socialLinks[${index}].url`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="URL" fullWidth />
-                      )}
-                    />
-                    <IconButton onClick={() => removeSocial(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                ))}
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() => appendSocial({ platform: "", url: "" })}
-                >
-                  Add Social Link
-                </Button>
-              </>
+              <AboutTab
+                socialFields={socialFields}
+                appendSocial={appendSocial}
+                removeSocial={removeSocial}
+                control={control}
+              />
             )}
             {selectedTab === 1 && (
-              <>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ marginTop: "1rem" }}
-                >
-                  Education
-                </Typography>
-
-                {educationFields.map((item, index) => (
-                  <Box
-                    key={item.id}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography variant="h6" gutterBottom>
-                        School/Institute
-                      </Typography>
-                      <IconButton onClick={() => removeEducation(index)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-
-                    <Controller
-                      name={`education[${index}].school`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="School Name" fullWidth />
-                      )}
-                    />
-                    <Controller
-                      name={`education[${index}].degree`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="Degree" fullWidth />
-                      )}
-                    />
-                    <Controller
-                      name={`education[${index}].city`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="City" fullWidth />
-                      )}
-                    />
-                    <Box sx={{ display: "flex", gap: "1rem" }}>
-                      <Controller
-                        name={`education[${index}].startDate`}
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            label="Start Date"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                          />
-                        )}
-                      />
-                      <Controller
-                        name={`education[${index}].endDate`}
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            label="End Date"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                ))}
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() =>
-                    appendEducation({
-                      school: "",
-                      degree: "",
-                      city: "",
-                      startDate: "",
-                      endDate: "",
-                    })
-                  }
-                >
-                  Add Education
-                </Button>
-              </>
+              <EducationTab
+                educationFields={educationFields}
+                appendEducation={appendEducation}
+                removeEducation={removeEducation}
+                control={control}
+              />
             )}
             {selectedTab === 2 && (
-              <>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ marginTop: "1rem" }}
-                >
-                  Skills
-                </Typography>
-
-                {skillFields.map((item, index) => (
-                  <Box
-                    key={item.id}
-                    sx={{
-                      display: "flex",
-                      gap: "1rem",
-                      alignItems: "center",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <Controller
-                      name={`skills[${index}].skill`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="Skill" fullWidth />
-                      )}
-                    />
-                    <IconButton onClick={() => removeSkill(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                ))}
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() => appendSkill({ skill: "" })}
-                >
-                  Add Skill
-                </Button>
-              </>
+              <SkillsTab
+                skillFields={skillFields}
+                appendSkill={appendSkill}
+                removeSkill={removeSkill}
+                control={control}
+              />
             )}
             {selectedTab === 3 && (
-              <>
-             
-
-                {experienceFields.map((item, index) => (
-                  <Box
-                    key={item.id}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography variant="h6" gutterBottom>
-                       Experience
-                      </Typography>
-                      <IconButton onClick={() => removeexperience(index)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-
-                    <Controller
-                      name={`experience[${index}].jobTitle`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="Job Title" fullWidth />
-                      )}
-                    />
-                    <Controller
-                      name={`experience[${index}].Company`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="Company" fullWidth />
-                      )}
-                    />
-                    <Controller
-                      name={`experience[${index}].city`}
-                      control={control}
-                      render={({ field }) => (
-                        <TextField {...field} label="City" fullWidth />
-                      )}
-                    />
-                    <Box sx={{ display: "flex", gap: "1rem" }}>
-                      <Controller
-                        name={`experience[${index}].startDate`}
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            label="Start Date"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                          />
-                        )}
-                      />
-                      <Controller
-                        name={`experience[${index}].endDate`}
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            label="End Date"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                ))}
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() =>
-                    appendexperience({
-                      jobTitle: "",
-                      Company: "",
-                      city: "",
-                      startDate: "",
-                      endDate: "",
-                    })
-                  }
-                >
-                  Add Experience
-                </Button>
-              </>
+              <ExperienceTab
+                experienceFields={experienceFields}
+                appendExperience={appendExperience}
+                removeExperience={removeExperience}
+                control={control}
+              />
             )}
             {selectedTab === 4 && (
-              <Controller
-                name="achievements"
+              <AchievementsTab
+                achievementsFields={achievementsFields}
+                appendAchievements={appendAchievements}
+                removeAchievements={removeAchievements}
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Achievements"
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
               />
             )}
             {selectedTab === 5 && (
-              <Controller
-                name="projects"
+              <ProjectsTab
+                projectFields={projectFields}
+                appendProject={appendProject}
+                removeProject={removeProject}
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Projects"
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
               />
             )}
           </form>
         </Box>
+        <Box >
+          <Typography variant="h6">Preview</Typography>
+          <ResumePreview data={watch()} />
+        </Box>
+
       </Box>
     </Container>
   );
