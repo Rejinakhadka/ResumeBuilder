@@ -1,19 +1,77 @@
 import React from "react";
-import {  TextField } from "@mui/material";
+import {
+  TextField,
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  Avatar,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton, Box, Button, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
+import { useImageContext } from "./context/Imagecontext";
 
-const AboutTab = ({ control,socialFields,appendSocial,removeSocial }) => {
+const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
+  const { image, setImage } = useImageContext();
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageDelete = () => {
+    setImage(null);
+  };
+
   return (
     <>
-      <Box sx={{ display: "flex", gap: "1rem" }}>
+      <Box sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}
+        >
+          {image && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar
+                alt="Uploaded Image"
+                src={image}
+                sx={{ marginRight: "1rem" }}
+              />
+              <IconButton onClick={handleImageDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          )}
+
+          <input
+            accept="image/*"
+            id="image-upload"
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+      
+            <Button variant="contained" >
+              Upload Image
+            </Button>
+        
+        </Box>
         <Controller
           name="firstName"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="First Name" fullWidth margin="normal" />
+            <TextField
+              {...field}
+              label="First Name"
+              fullWidth
+              margin="normal"
+            />
           )}
         />
         <Controller
@@ -23,86 +81,47 @@ const AboutTab = ({ control,socialFields,appendSocial,removeSocial }) => {
             <TextField {...field} label="Last Name" fullWidth margin="normal" />
           )}
         />
-      </Box>
-
-      <Controller
-        name="email"
-        control={control}
-        render={({ field }) => (
-          <TextField {...field} label="Email" fullWidth margin="normal" />
-        )}
-      />
-      <Box sx={{ display: "flex", gap: "1rem" }}>
-        <Controller
-          name="phoneno"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} label="Phone No" fullWidth margin="normal" />
-          )}
-        />
-        <Controller
-          name="address"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} label="Address" fullWidth margin="normal" />
-          )}
-        />
-      </Box>
-
-      <Controller
-        name="summary"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            label="Summary"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={4}
-          />
-        )}
-      />
-
-      <Typography variant="h6" gutterBottom sx={{ marginTop: "1rem" }}>
-        Social Links
-      </Typography>
-      {socialFields.map((item, index) => (
-        <Box
-          key={item.id}
-          sx={{
-            display: "flex",
-            gap: "1rem",
-            alignItems: "center",
-            marginBottom: "1rem",
-          }}
+        \
+        <Typography variant="h6" gutterBottom sx={{ marginTop: "1rem" }}>
+          Social Links
+        </Typography>
+        {socialFields.map((item, index) => (
+          <Box
+            key={item.id}
+            sx={{
+              display: "flex",
+              gap: "1rem",
+              alignItems: "center",
+              marginBottom: "1rem",
+            }}
+          >
+            <Controller
+              name={`socialLinks[${index}].platform`}
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Platform" fullWidth />
+              )}
+            />
+            <Controller
+              name={`socialLinks[${index}].url`}
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="URL" fullWidth />
+              )}
+            />
+            <IconButton onClick={() => removeSocial(index)}>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        ))}
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={() => appendSocial({ platform: "", url: "" })}
         >
-          <Controller
-            name={`socialLinks[${index}].platform`}
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="Platform" fullWidth />
-            )}
-          />
-          <Controller
-            name={`socialLinks[${index}].url`}
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="URL" fullWidth />
-            )}
-          />
-          <IconButton onClick={() => removeSocial(index)}>
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      ))}
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={() => appendSocial({ platform: "", url: "" })}
-      >
-        Add Social Link
-      </Button>
+          Add Social Link
+        </Button>
+      </Box>
     </>
   );
 };

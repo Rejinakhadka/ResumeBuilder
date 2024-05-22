@@ -1,25 +1,17 @@
-import React, { useEffect, useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import React from "react";
 import { Container, Box, Typography, Avatar, Grid } from "@mui/material";
+import { useImageContext } from "./context/Imagecontext";
 
 const ResumePreview = ({ data }) => {
-  const componentRef = useRef();
-  //   const handlePrint = useReactToPrint({
-  //     content: () => componentRef.current,
-  //   });
-
-  //   useEffect(() => {
-  //     handlePrint();
-  //   }, [handlePrint]);
-
+  const { image } = useImageContext();
   return (
     <Container
-      ref={componentRef}
       sx={{
         padding: "20px",
       }}
     >
       <Box display="flex" gap="20px" alignItems="center">
+        <Avatar src={image} sx={{ width: 100, height: 100 }} />
         <Box>
           <Typography variant="h4">
             {data.firstName} {data.lastName}

@@ -30,6 +30,7 @@ const ResumeForm = ({ onSubmit }) => {
     },
   });
   const [selectedTab, setSelectedTab] = useState(0);
+  const [image, setImage] = useState(null);
 
   const {
     fields: socialFields,
@@ -89,8 +90,7 @@ const ResumeForm = ({ onSubmit }) => {
   };
 
   return (
-    <div >
-    
+    <div>
       <Box sx={{ display: "flex", gap: "0px" }}>
         <Box
           sx={{
@@ -125,6 +125,8 @@ const ResumeForm = ({ onSubmit }) => {
                   appendSocial={appendSocial}
                   removeSocial={removeSocial}
                   control={control}
+                  image={image}
+                  setImage={setImage}
                 />
               )}
               {selectedTab === 1 && (
@@ -172,7 +174,7 @@ const ResumeForm = ({ onSubmit }) => {
         </Box>
         <Box sx={{ width: "60%" }}>
           <Box sx={{ height: "100vh", overflow: "auto" }}>
-            <ResumePreview data={watch()} />
+            <ResumePreview data={watch()}  /> 
           </Box>
         </Box>
       </Box>
