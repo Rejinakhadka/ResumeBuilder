@@ -96,8 +96,8 @@ const ResumeForm = ({ onSubmit }) => {
             display: "flex",
             width: "40%",
             gap: "30px",
-            backgroundColor: "ThreeDHighlight",
-            padding: "1rem",
+            backgroundColor: "#87AFC7",
+            padding: "2rem",
           }}
         >
           <Box>

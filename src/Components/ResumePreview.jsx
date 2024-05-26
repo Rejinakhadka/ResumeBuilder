@@ -55,11 +55,12 @@ const ResumePreview = ({ data }) => {
   return (
     <Container
       sx={{
-        padding: "20px",
+        
+        
       }}
     >
       <NavBar handlePrint={handlePrint} />
-      <div ref={componentRef}>
+      <div ref={componentRef} style={{padding:"2rem"}}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Avatar src={image} sx={{ width: 100, height: 100 }} />
         <div style={{ marginLeft: 16 }}>
@@ -72,7 +73,7 @@ const ResumePreview = ({ data }) => {
       
       <Divider sx={{ marginTop: "20px" }} />
       <div style={{ display: "flex", marginTop: 16 }}>
-        <div style={{ width: "30%" }}>
+        <div style={{ width: "40%" }}>
           <div style={{ marginBottom: 24 }}>
             <Typography variant="body1" display="flex" alignItems="center">
               <Email sx={{ marginRight: 1 }} /> {data.email}
@@ -162,7 +163,7 @@ const ResumePreview = ({ data }) => {
         </div>
         <Divider orientation="vertical" flexItem />
 
-        <div style={{ marginLeft: 16, width: "70%" }}>
+        <div style={{ marginLeft: 16, width: "60%" }}>
           <div style={{ marginBottom: 24 }}>
             <Typography
               variant="h6"
