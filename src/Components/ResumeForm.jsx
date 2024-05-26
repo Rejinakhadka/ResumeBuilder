@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Button, Container, Typography, Tabs, Tab, Box } from "@mui/material";
+import { Button, Box, Tabs, Tab } from "@mui/material";
 import AboutTab from "./About";
 import EducationTab from "./Education";
 import SkillsTab from "./Skills";
 import ExperienceTab from "./Experience";
 import AchievementsTab from "./Achievements";
 import ProjectsTab from "./Project";
-
 import ResumePreview from "./ResumePreview";
 
 const ResumeForm = ({ onSubmit }) => {
-  const { handleSubmit, control, watch } = useForm({
+  const { handleSubmit, control, watch, setValue } = useForm({
     defaultValues: {
-      socialLinks: [
-        { platform: "", url: "" },
-       
-      ],
-      education: [
-        { school: "", degree: "", city: "", startDate: "", endDate: "" },
-      ],
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneno: "",
+      address: "",
+      summary: "",
+      socialLinks: [{ platform: "", url: "" }],
+      education: [{ school: "", degree: "", city: "", startDate: "", endDate: "" }],
       skills: [{ skill: "" }],
-      experience: [
-        { jobTitle: "", Company: "", city: "", startDate: "", endDate: "" },
-      ],
+      experience: [{ jobTitle: "", Company: "", city: "", startDate: "", endDate: "" }],
       projects: [{ title: "", description: "", link: "" }],
       achievements: [{ title: "", description: "" }],
     },
@@ -35,58 +33,64 @@ const ResumeForm = ({ onSubmit }) => {
     fields: socialFields,
     append: appendSocial,
     remove: removeSocial,
-  } = useFieldArray({
-    control,
-    name: "socialLinks",
-  });
+  } = useFieldArray({ control, name: "socialLinks" });
 
   const {
     fields: educationFields,
     append: appendEducation,
     remove: removeEducation,
-  } = useFieldArray({
-    control,
-    name: "education",
-  });
+  } = useFieldArray({ control, name: "education" });
 
   const {
     fields: skillFields,
     append: appendSkill,
     remove: removeSkill,
-  } = useFieldArray({
-    control,
-    name: "skills",
-  });
+  } = useFieldArray({ control, name: "skills" });
 
   const {
     fields: experienceFields,
     append: appendExperience,
     remove: removeExperience,
-  } = useFieldArray({
-    control,
-    name: "experience",
-  });
+  } = useFieldArray({ control, name: "experience" });
+
   const {
     fields: achievementsFields,
     append: appendAchievements,
     remove: removeAchievements,
-  } = useFieldArray({
-    control,
-    name: "achievements",
-  });
+  } = useFieldArray({ control, name: "achievements" });
 
   const {
     fields: projectFields,
     append: appendProject,
     remove: removeProject,
-  } = useFieldArray({
-    control,
-    name: "projects",
-  });
+  } = useFieldArray({ control, name: "projects" });
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+
+  // Load form data from local storage on component mount
+  useEffect(() => {
+    const storedData = localStorage.getItem("resumeFormData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      Object.keys(parsedData).forEach((key) => {
+        setValue(key, parsedData[key]);
+      });
+      if (parsedData.image) {
+        setImage(parsedData.image);
+      }
+    }
+  }, [setValue]);
+
+  // Watch form data changes and save to local storage
+  const watchedData = watch();
+  useEffect(() => {
+    localStorage.setItem(
+      "resumeFormData",
+      JSON.stringify({ ...watchedData, image })
+    );
+  }, [watchedData, image]);
 
   return (
     <div>
@@ -96,7 +100,7 @@ const ResumeForm = ({ onSubmit }) => {
             display: "flex",
             width: "40%",
             gap: "30px",
-            backgroundColor: "#87AFC7",
+            backgroundColor: "#EDF1F6",
             padding: "2rem",
           }}
         >
@@ -173,7 +177,7 @@ const ResumeForm = ({ onSubmit }) => {
         </Box>
         <Box sx={{ width: "60%" }}>
           <Box sx={{ height: "100vh", overflow: "auto" }}>
-            <ResumePreview data={watch()}  /> 
+            <ResumePreview data={watch()} />
           </Box>
         </Box>
       </Box>
