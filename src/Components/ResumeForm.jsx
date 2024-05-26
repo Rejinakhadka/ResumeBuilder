@@ -69,7 +69,6 @@ const ResumeForm = ({ onSubmit }) => {
     setSelectedTab(newValue);
   };
 
-  // Load form data from local storage on component mount
   useEffect(() => {
     const storedData = localStorage.getItem("resumeFormData");
     if (storedData) {
@@ -83,7 +82,7 @@ const ResumeForm = ({ onSubmit }) => {
     }
   }, [setValue]);
 
-  // Watch form data changes and save to local storage
+
   const watchedData = watch();
   useEffect(() => {
     localStorage.setItem(
