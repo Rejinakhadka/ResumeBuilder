@@ -54,9 +54,21 @@ const ResumePreview = ({ data }) => {
   console.log(data, "pp");
 
   return (
-    <Container sx={{}}>
+    <Container sx={{ backgroundColor:"#EDF1F6"}} >
       <NavBar handlePrint={handlePrint} />
-      <div ref={componentRef} style={{ padding: "2rem" }}>
+      <div
+       ref={componentRef}   
+      style={{
+       backgroundColor: "white",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", 
+        borderRadius: "8px",
+        maxWidth: "800px", 
+        height: "100vh", 
+        margin: "0 auto", 
+        padding: "2rem", 
+        boxSizing: "border-box", 
+      }}
+    >
         <div style={{ display: "flex", gap: "20px" }}>
           {image && <Avatar src={image} sx={{ width: 100, height: 100 }} />}
           <div style={{ marginLeft: 16 }}>
@@ -65,12 +77,12 @@ const ResumePreview = ({ data }) => {
             </Typography>
             <Typography
               variant="body1"
-              style={{
-                fontSize: "12px",
+              sx={{
+                fontSize: "16px",
                 color: "rgb(24, 24, 24)",
                 letterSpacing: "0.2px",
-                whiteSpace: "pre-wrap",
-                width: "10px",
+                whiteSpace: "pre-wrap", // Allows text to wrap to the next line
+                maxWidth: "100%", // Limits text width to container width
               }}
             >
               {data.summary}
