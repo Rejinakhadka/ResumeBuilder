@@ -53,6 +53,13 @@ const ExperienceTab = ({ control, experienceFields, appendExperience, removeExpe
               <TextField {...field} label="City" fullWidth />
             )}
           />
+             <Controller
+            name={`experience[${index}].description`}
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} label="Description" fullWidth  multiline rows={4} />
+            )}
+          />
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Controller
               name={`experience[${index}].startDate`}

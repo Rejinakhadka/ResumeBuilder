@@ -196,7 +196,12 @@ const ResumePreview = ({ data }) => {
             <div>
               {data.experience.some(
                 (exp) =>
-                  exp.jobTitle || exp.startDate || exp.endDate || exp.Company
+                  exp.jobTitle ||
+                  exp.startDate ||
+                  exp.endDate ||
+                  exp.Company ||
+                  exp.description ||
+                  exp.city
               ) && (
                 <div style={{ marginBottom: 24 }}>
                   <Typography
@@ -216,7 +221,9 @@ const ResumePreview = ({ data }) => {
                       (exp.jobTitle ||
                         exp.startDate ||
                         exp.endDate ||
-                        exp.Company) && (
+                        exp.Company ||
+                        exp.description ||
+                        exp.city) && (
                         <div key={index} style={{ marginBottom: 16 }}>
                           <Typography
                             variant="body1"

@@ -21,7 +21,7 @@ const ResumeForm = ({ onSubmit }) => {
       socialLinks: [{ platform: "", url: "" }],
       education: [{ school: "", degree: "", city: "", startDate: "", endDate: "" }],
       skills: [{ skill: "" }],
-      experience: [{ jobTitle: "", Company: "", city: "", startDate: "", endDate: "" }],
+      experience: [{ jobTitle: "", Company: "", city: "", desciption:"",startDate: "", endDate: "" }],
       projects: [{ title: "", description: "", link: "" }],
       achievements: [{ title: "", description: "" }],
     },
