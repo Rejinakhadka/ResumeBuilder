@@ -1,42 +1,46 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 import {
   Container,
-  Typography,
   Avatar,
   Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Box,
   Button,
-} from "@mui/material";
-import {
-  Email,
-  Phone,
-  LocationOn,
-  CheckCircleOutline,
-} from "@mui/icons-material";
-import { useImageContext } from "./context/Imagecontext";
-import { useReactToPrint } from "react-to-print";
-import {
-  Instagram,
-  LinkedIn,
-  GitHub,
-  Language,
-  Twitter,
-} from "@mui/icons-material";
+  Select,
+  MenuItem,
+} from '@mui/material';
+import { useAppContext } from './context/AppContext';
+import { useReactToPrint } from 'react-to-print';
+import Template1 from './Template1';
+import Template2 from './Template2';
+
 
 const NavBar = ({ handlePrint }) => {
+  const { template, setTemplate } = useAppContext();
+
+  const handleChange = (event) => {
+    setTemplate(event.target.value);
+  };
+
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        marginBottom: "20px",
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginBottom: '20px',
+        gap: '15px',
+        textAlign: 'center',
+        alignItems: 'center',
       }}
     >
-      <Button variant="contained" onClick={handlePrint} sx={{ mt: 2 }}>
+      <Select
+        value={template}
+        onChange={handleChange}
+        style={{ height: '30px' }}
+      >
+        <MenuItem value="Template1">Template 1</MenuItem>
+        <MenuItem value="Template2">Template 2</MenuItem>
+      </Select>
+      <Button variant="contained" onClick={handlePrint}>
         Print CV
       </Button>
     </Box>
@@ -44,317 +48,31 @@ const NavBar = ({ handlePrint }) => {
 };
 
 const ResumePreview = ({ data }) => {
-  const { image } = useImageContext();
+  const { image, template } = useAppContext();
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  console.log(data, "pp");
-
   return (
-    <Container sx={{ backgroundColor:"#EDF1F6"}} >
+    <Container sx={{ backgroundColor: '#EDF1F6' }}>
       <NavBar handlePrint={handlePrint} />
       <div
-       ref={componentRef}   
-      style={{
-       backgroundColor: "white",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", 
-        borderRadius: "8px",
-        maxWidth: "800px", 
-        height: "100vh", 
-        margin: "0 auto", 
-        padding: "2rem", 
-        boxSizing: "border-box", 
-      }}
-    >
-        <div style={{ display: "flex", gap: "20px" }}>
-          {image && <Avatar src={image} sx={{ width: 100, height: 100 }} />}
-          <div style={{ marginLeft: 16 }}>
-            <Typography variant="h4">
-              {data.firstName} {data.lastName}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                fontSize: "16px",
-                color: "rgb(24, 24, 24)",
-                letterSpacing: "0.2px",
-                whiteSpace: "pre-wrap", // Allows text to wrap to the next line
-                maxWidth: "100%", // Limits text width to container width
-              }}
-            >
-              {data.summary}
-            </Typography>
-          </div>
-        </div>
-
-        <Divider sx={{ marginTop: "20px" }} />
-        <div style={{ display: "flex", marginTop: 16 }}>
-          <div style={{ width: "40%" }}>
-            <div style={{ marginBottom: 24 }}>
-              {data.email && (
-                <Typography variant="body1" display="flex" alignItems="center">
-                  <Email sx={{ marginRight: 1 }} /> {data.email}
-                </Typography>
-              )}
-              {data.phoneno && (
-                <Typography variant="body1" display="flex" alignItems="center">
-                  <Phone sx={{ marginRight: 1 }} /> {data.phoneno}
-                </Typography>
-              )}
-              {data.address && (
-                <Typography variant="body1" display="flex" alignItems="center">
-                  <LocationOn sx={{ marginRight: 1 }} /> {data.address}
-                </Typography>
-              )}
-              {data.socialLinks.map((link, index) => (
-                <Typography
-                  key={index}
-                  variant="body1"
-                  display="flex"
-                  alignItems="center"
-                >
-                  <span style={{ marginRight: 4 }}>
-                    {link.platform === "Instagram" && <Instagram />}
-                    {link.platform === "LinkedIn" && <LinkedIn />}
-                    {link.platform === "Github" && <GitHub />}
-                    {link.platform === "Website" && <Language />}
-                    {link.platform === "Twitter" && <Twitter />}
-                  </span>
-                  {link.url}
-                </Typography>
-              ))}
-            </div>
-
-            <div>
-              {data.education.some(
-                (edu) => edu.school || edu.city || edu.degree
-              ) && (
-                <Box sx={{ color: "black" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      marginBottom: 2,
-                      backgroundColor: "#f2f2f2",
-                      padding: "8px",
-                      borderRadius: "10px",
-                      width: "150px",
-                    }}
-                  >
-                    Education
-                  </Typography>
-                  {data.education.map(
-                    (edu, index) =>
-                      (edu.school || edu.city || edu.degree) && (
-                        <Box key={index} sx={{ mb: 3 }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: "bold", mb: 1 }}
-                          >
-                            {edu.degree}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "gray", mb: 1 }}
-                          >
-                            {edu.school} / {edu.city}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "gray", mb: 1 }}
-                          >
-                            {edu.startDate} - {edu.endDate}
-                          </Typography>
-                        </Box>
-                      )
-                  )}
-                </Box>
-              )}
-            </div>
-
-            {data.skills.some((skillObj) => skillObj.skill) && (
-              <div>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    marginBottom: 2,
-                    backgroundColor: "#f2f2f2",
-                    padding: "8px",
-                    borderRadius: "10px",
-                    width: "150px",
-                  }}
-                >
-                  Skills
-                </Typography>
-
-                <List>
-                  {data.skills.map((skillObj, index) => (
-                    <ListItem key={index}>
-                      <ListItemIcon>
-                        <CheckCircleOutline />
-                      </ListItemIcon>
-                      <ListItemText primary={skillObj.skill} />
-                    </ListItem>
-                  ))}
-                </List>
-              </div>
-            )}
-          </div>
-          <Divider orientation="vertical" flexItem />
-
-          <div style={{ marginLeft: 16, width: "60%" }}>
-            <div>
-              {data.experience.some(
-                (exp) =>
-                  exp.jobTitle ||
-                  exp.startDate ||
-                  exp.endDate ||
-                  exp.Company ||
-                  exp.description ||
-                  exp.city
-              ) && (
-                <div style={{ marginBottom: 24 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      marginBottom: 2,
-                      backgroundColor: "#f2f2f2",
-                      padding: "8px",
-                      borderRadius: "10px",
-                      width: "250px",
-                    }}
-                  >
-                    Work Experience
-                  </Typography>
-                  {data.experience.map(
-                    (exp, index) =>
-                      (exp.jobTitle ||
-                        exp.startDate ||
-                        exp.endDate ||
-                        exp.Company ||
-                        exp.description ||
-                        exp.city) && (
-                        <div key={index} style={{ marginBottom: 16 }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: "bold", marginBottom: 1 }}
-                          >
-                            {exp.jobTitle}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "gray", marginBottom: 1 }}
-                          >
-                            {exp.startDate} - {exp.endDate}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "gray", marginBottom: 1 }}
-                          >
-                            {exp.Company} / {exp.city}
-                          </Typography>
-                          <Typography variant="body2">
-                            {exp.description}
-                          </Typography>
-                        </div>
-                      )
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div>
-              {data.achievements.some(
-                (ach) => ach.title || ach.description
-              ) && (
-                <div style={{ marginBottom: 24 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      marginBottom: 2,
-                      backgroundColor: "#f2f2f2",
-                      padding: "8px",
-                      borderRadius: "10px",
-                      width: "250px",
-                    }}
-                  >
-                    Achievements
-                  </Typography>
-                  {data.achievements.map(
-                    (ach, index) =>
-                      (ach.title || ach.description) && (
-                        <div key={index} style={{ marginBottom: 16 }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: "bold", marginBottom: 1 }}
-                          >
-                            {ach.title}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "gray", marginBottom: 1 }}
-                          >
-                            {ach.description}
-                          </Typography>
-                        </div>
-                      )
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div>
-              {data.projects.some(
-                (project) =>
-                  project.title || project.description || project.link
-              ) && (
-                <div style={{ marginBottom: 24 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      marginBottom: 2,
-                      backgroundColor: "#f2f2f2",
-                      padding: "8px",
-                      borderRadius: "10px",
-                      width: "250px",
-                    }}
-                  >
-                    Projects
-                  </Typography>
-                  {data.projects.map(
-                    (project, index) =>
-                      (project.title ||
-                        project.description ||
-                        project.link) && (
-                        <div key={index} style={{ marginBottom: 16 }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: "bold", marginBottom: 1 }}
-                          >
-                            {project.title}
-                          </Typography>
-                          <Typography variant="body2" sx={{ marginBottom: 1 }}>
-                            {project.description}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: "blue" }}>
-                            <a
-                              href={project.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {project.link}
-                            </a>
-                          </Typography>
-                        </div>
-                      )
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        ref={componentRef}
+        style={{
+          backgroundColor: 'white',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '8px',
+          maxWidth: '800px',
+          height: '100vh',
+          margin: '0 auto',
+          padding: '2rem',
+          boxSizing: 'border-box',
+        }}
+      >
+        {template === 'Template1' && <Template1 data={data} image={image} />}
+        {template === 'Template2' && <Template2 data={data} image={image} />}
       </div>
     </Container>
   );

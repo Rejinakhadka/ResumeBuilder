@@ -14,7 +14,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Controller } from "react-hook-form";
-import { useImageContext } from "./context/Imagecontext";
+import { useAppContext } from "./context/AppContext";
 
 const socialPlatforms = [
   "Instagram",
@@ -26,7 +26,7 @@ const socialPlatforms = [
 ];
 
 const AboutTab = ({ control, socialFields, appendSocial, removeSocial }) => {
-  const { image, setImage } = useImageContext();
+  const { image, setImage } = useAppContext();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
